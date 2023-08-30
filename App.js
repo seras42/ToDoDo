@@ -31,23 +31,22 @@ export default function App() {
 
   return (
     <View>
-      
-      
-      
-  
       <View style={styles.container}>
-      <TextTitle />
+      <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow}  />
 
+
+      <TextTitle />
        <View style = {styles.listContainer}>
        <Text>Open up App.js to start working on your app!</Text>
        <StatusBar style="auto" />
        </View>
-
-       <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow}  />
        <NewTaskButton openAddWindow={openAddWindow}/>
+       
       
        
        </View>
+
+      
     </View>
   );
 }
@@ -67,8 +66,11 @@ const AddItemWindow = ({showAddWindow, closeAddWindow}) => {
     <View >
       <Modal animationType="slide" transparent={true} visible={showAddWindow}>
         <View style={styles.addItemContainer}>
-          <TextInput>This is the new container or window!</TextInput>
+
+
+          <TextInput style={styles.textInputContainer}>This is the new container or window!</TextInput>
           <View style={styles.addItemButtonContaier}>
+
           <TouchableOpacity style={styles.newTaskAddButton}><Text>Add</Text></TouchableOpacity>
           <TouchableOpacity onPress={() => closeAddWindow()} style={styles.newTaskExitButton}><Text>Exit</Text></TouchableOpacity>
           </View>
@@ -92,7 +94,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignContent: 'center',
     justifyContent: 'center',
-    display: 'flex',
     height:'100%'
     
   },
@@ -100,9 +101,14 @@ const styles = StyleSheet.create({
     height: '80%'
 
   },
+  textInputContainer: {
+    borderWidth: 3,
+    padding: 15,
+    borderRadius: 20,
+    top: -10,
+
+  },
   addItemContainer: {
-    //position: 'absolute',
-    //display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
@@ -111,16 +117,22 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 4,
     borderRadius: 20,
-    //left: '10%',
-    //top: '30%', 
+    left: '5%',
+    right: '5%',
+    top: '30%', 
     //bottom: 0,
-    width: '80%',
+    width: '90%',
     height: 200,
   
 
   },
   addItemButtonContaier: {
+    flex:1,
     flexDirection: 'row',
+    padding: 10,
+    borderWidth: 2,
+    bottom:-20
+    
 
   },
   newTaskExitButton: {
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 100,
     height: 60,
-    padding: 20,
+    padding: 40,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -144,7 +156,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 100,
     height: 60,
-    padding: 20,
+    padding: 40,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
