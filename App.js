@@ -1,10 +1,35 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, Alert } from 'react-native';
 
 export default function App() {
-  return (
-  
+  const [showAddWindow, setShowAddWindow] = useState(false);
 
+  const openAddWindow = () => {
+    setShowAddWindow(true);
+    showAlert();
+  };
+
+  const closeAddWindow = () => {
+    setShowAddWindow(false);
+    showAlert();
+  };
+  const showAlert = () => {
+    console.log('Open Add Window');
+    Alert.alert(
+      'Alert Title',
+      'This is the alert message.',
+      [
+        {
+          text: 'OK',
+          onPress: () => console.log('OK Pressed'),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  return (
     <View>
 
       <View style={styles.container}>
@@ -12,28 +37,38 @@ export default function App() {
     <View style = {styles.listContainer}>
       <Text>Open up App.js to start working on your app!</Text>
       <StatusBar style="auto" /></View>
-      
       </View>
+      <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow} />
 
-
-
-      <CreateNewTaskButton />
+      <NewTaskButton openAddWindow={openAddWindow}/>
     </View>
   );
 }
-const CreateNewTaskButton = () => {
+const NewTaskButton = ({openAddWindow}) => {
   return (
 <View style={styles.buttonContainer}>
       <TouchableOpacity
-        title="Press me"
-        onPress={() => print('Simple Button pressed')}
-        style = {styles.button}
+        title="Press me" onPress={() => openAddWindow()} style = {styles.button}
         >
-
-
          <Text style = {{color: 'white', textAlign: 'center', fontSize: 30}}>+</Text>
 
       </TouchableOpacity></View>
+  );
+};
+const AddItemWindow = (showAddWindow, {closeAddWindow}) => {
+  return(
+    <View>
+      <Modal animationType="slide" transparent={true} visible={showAddWindow}>
+        <View >
+          <Text style = {styles.container }>This is the new container or window!</Text>
+
+          <TouchableOpacity onPress={() => closeAddWindow()}>
+            <Text>Close Modal</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    </View>
+
   );
 };
 
@@ -50,6 +85,17 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     height:'100%'
     
+  },
+  addItemContainer: {
+    alignContent: 'center',
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    height: 150,
+    justifyContent: 'center',
+    marginVertical: 8,
+    marginHorizontal: 16,
+    padding: 20,
   },
   title: {
     color: 'black',
@@ -80,10 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
     borderRadius: 8,
     padding: 20,
-    minHeight: 80,
-  
-
-   
+    minHeight: 80
   }
   
 });
