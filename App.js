@@ -1,14 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, Alert, TextInput } from 'react-native';
+import React, {useState,useRef, useEffect,useCallback} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, Alert, TextInput,KeyboardAvoidingView } from 'react-native';
+//import { useEffect } from 'react/cjs/react.production.min';
 
 export default function App() {
   const [showAddWindow, setShowAddWindow] = useState(false);
 
   const openAddWindow = () => {
     setShowAddWindow(true);
-    console.log('Open add window clicked')
-    console.log(showAddWindow);
+    //console.log('Open add window clicked')
+    //console.log(showAddWindow);
   };
 
   const closeAddWindow = () => {
@@ -29,25 +30,34 @@ export default function App() {
     );
   };
 
+
+
   return (
-    <View>
       <View style={styles.container}>
-      <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow}  />
 
 
+        <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow}  />
+        
+
+
+
+    
       <TextTitle />
        <View style = {styles.listContainer}>
        <Text>Open up App.js to start working on your app!</Text>
        <StatusBar style="auto" />
        </View>
+
+       
        <NewTaskButton openAddWindow={openAddWindow}/>
+    
        
       
        
        </View>
 
       
-    </View>
+    
   );
 }
 const NewTaskButton = ({openAddWindow}) => {
@@ -62,21 +72,33 @@ const NewTaskButton = ({openAddWindow}) => {
   );
 };
 const AddItemWindow = ({showAddWindow, closeAddWindow}) => {
+  const addNoteInput = useRef(null);
+
+  
+  
   return(
-    <View >
-      <Modal animationType="slide" transparent={true} visible={showAddWindow}>
+    
+      <Modal animationType="slide" transparent={true} visible={showAddWindow} onShow={() => {addNoteInput.current.focus();}}>
+        <KeyboardAvoidingView behavior="padding">
+        
+      
         <View style={styles.addItemContainer}>
 
+          <TextInput 
+          multiline style={styles.textInputContainer} placeholder="Input your note" ref={addNoteInput} keyboardShouldPersistTaps='always'
+          numberOfLines={3} ></TextInput>
 
-          <TextInput style={styles.textInputContainer}>This is the new container or window!</TextInput>
           <View style={styles.addItemButtonContaier}>
-
-          <TouchableOpacity style={styles.newTaskAddButton}><Text>Add</Text></TouchableOpacity>
-          <TouchableOpacity onPress={() => closeAddWindow()} style={styles.newTaskExitButton}><Text>Exit</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => closeAddWindow()} style={styles.newTaskAddButton}><Text style = {{color: 'black', textAlign: 'center', fontSize: 15}}>Add</Text></TouchableOpacity>
+          <TouchableOpacity onPress={() => closeAddWindow()} style={styles.newTaskExitButton}><Text style = {{color: 'black', textAlign: 'center', fontSize: 15}}>Exit</Text></TouchableOpacity>
           </View>
+          
         </View>
+        </KeyboardAvoidingView>
+      
+        
       </Modal>
-    </View>
+    
 
   );
 };
@@ -90,58 +112,77 @@ const TextTitle = () => {
 
 const styles = StyleSheet.create({
   container: {
-    lex:1,
+    flex:1,
     flexDirection: 'column',
     alignContent: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
+    alignItems: 'center',
+    top:0,
     height:'100%'
     
   },
   listContainer: {
-    height: '80%'
+    //height: '80%'
 
   },
   textInputContainer: {
+    textAlign: 'center',
+    width: '90%',
+    height:'80%',
+    
+    
+   
     borderWidth: 3,
-    padding: 15,
+    padding: 18,
     borderRadius: 20,
-    top: -10,
-
+    borderColor: '#bfbfbf',
+    backgroundColor:'#f2f2f2'
   },
   addItemContainer: {
-    justifyContent: 'center',
+    
+    alignContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    backgroundColor: 'white',
-    alignContent: 'center',
-    borderColor: 'black',
+    justifyContent: 'center',
+    backgroundColor: '#d9d9d9',
+    borderColor: 'green',
     borderWidth: 4,
+    padding:10,
     borderRadius: 20,
-    left: '5%',
-    right: '5%',
+    height:200,
+    margin: 30,
+
     top: '30%', 
-    //bottom: 0,
-    width: '90%',
-    height: 200,
-  
 
   },
   addItemButtonContaier: {
-    flex:1,
+    flex:3,
     flexDirection: 'row',
-    padding: 10,
-    borderWidth: 2,
-    bottom:-20
+    //alignContent: 'flex-start',
+    justifyContent: 'flex-end',
+    alignItems: 'stretch',
+    //bottom:0,
+    //alignItems: 'center',
+    //alignContent: 'center',
+    //justifyContent: 'center',
+    padding: 1,
+    //borderColor:'blue',
+    //borderWidth: 1,
+ 
+
+   
     
 
   },
   newTaskExitButton: {
-    backgroundColor: 'red',
+    backgroundColor: '#e60000',
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 8,
-    width: 100,
-    height: 60,
+    //width: 80,
+    width: '50%',
+
+    height: 40,
     padding: 40,
     borderRadius: 20,
     paddingVertical: 10,
@@ -150,26 +191,20 @@ const styles = StyleSheet.create({
 
   },
   newTaskAddButton: {
-    backgroundColor: 'green',
+    backgroundColor: '#1f7a1f',
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 8,
-    width: 100,
-    height: 60,
+    width: '50%',
+    //width: 80,
+    height: 40,
     padding: 40,
     borderRadius: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
 
   },
-  item: {
-    backgroundColor: '#f9c2ff',
-    height: 150,
-    justifyContent: 'center',
-    marginVertical: 8,
-    marginHorizontal: 16,
-    padding: 20,
-  },
+  
   title: {
     color: 'black',
     fontWeight: 'bold',
@@ -196,9 +231,13 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     backgroundColor: 'grey',
+    justifyContent: 'flex-start',
+    
     borderRadius: 8,
     padding: 20,
     minHeight: 80,
+    maxHeight: '10%',
+    top:0,
     width: '100%',
     height: '10%'
   }
