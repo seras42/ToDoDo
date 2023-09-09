@@ -1,19 +1,31 @@
 import React, {useState,useRef, useEffect,useCallback} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView } from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView, Pressable } from 'react-native';
 //import ListItem from './ListItem';
 
+import TextNoteButton from './TextNoteButton';
 
 
 
-const getItem = (_data, index) => ({
+
+
+const getItem = (item, index) => ({
   id: Math.random().toString(12).substring(0),
-  title: `Item ${index + 1}`,
+  text: `Item ${index + 1}`,
 });
+
+
 
 
 
 const DynamicList = ({showAddWindow, closeAddWindow}) => {
   //items gets intialized as empty array, and setItems is a setter for it
+
+ const getItem = (index) => ({
+  text: items.map.getItem(index)
+ });
+
+
+
     const [items, setItems] = useState([]);
 
     const [newItem, setNewItem] = useState('');
@@ -38,27 +50,26 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
         <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow} addItem={addItem} newItem={newItem} setNewItem={setNewItem} resetInput={resetInput}/>
 
 
-{/*
-
         <View style={{padding: 10}}>
         {items.map((item, index) => (
           <ListItem
             key={index}
             item={item}
             onDelete={() => removeItem(index)}
-            //style={{padding: 10,flex:4}}
+           
           />
         ))}
         </View>
-        */}
+        
 
 
 
+{/*
         <VirtualizedList
         data={items}
         keyExtractor={(item, index) => index.toString()}
         getItemCount={() => items.length}
-
+        getItem={getItem}
         renderItem={({ item, index }) => (
           <ListItem
             key={index}
@@ -68,7 +79,7 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
         )}
       />
 
-        
+        */}
 
 
 
@@ -94,19 +105,15 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
     return (
       <View style={itemStyles.itemStyle}>
 
-        <TouchableOpacity 
-      onPress={() => {
-        setIsLongPressing(false);
-      }}
-      onLongPress={() => {
-        onDelete();
-    }}
-    delayLongPress={500}
-    >
-      <View>
-        <Text style={{ color: 'black' }}>{item}</Text>
-      </View>
-    </TouchableOpacity>
+       
+
+
+    
+
+        <TextNoteButton onDelete={onDelete} item={item}>
+       
+
+        </TextNoteButton>
     
       </View>
     );
@@ -122,6 +129,7 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
           
         
           <View style={styles.addItemContainer}>
+         
   
             <TextInput 
             multiline style={styles.textInputContainer } placeholder="Input your note" ref={addNoteInput}
