@@ -16,10 +16,7 @@ export default function App() {
     setShowAddWindow(false);
   };
 
-  const addNote = () => {
-
-
-  };
+ 
 
   const showAlert = () => {
     console.log('Open Add Window');
@@ -42,6 +39,8 @@ export default function App() {
       <View style={styles.container}>
 
       <TextTitle />
+
+      
 
 
        
