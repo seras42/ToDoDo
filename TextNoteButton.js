@@ -48,7 +48,7 @@ const TextNoteButton = ({onDelete, item}) => {
         onPressOut={() => setIsPressed(false)}
         style={[styles.button, { backgroundColor }]}
       >
-        <Text>{item}</Text>
+        <Text>{item.content}</Text>
       </AnimatedPressable>
     );
 };

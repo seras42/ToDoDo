@@ -1,12 +1,14 @@
 import React, {useState,useRef, useEffect,useCallback} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView, Pressable, Keyboard,TouchableWithoutFeedback } from 'react-native';
-//import ListItem from './ListItem';
 
 import TextNoteButton from './TextNoteButton';
+import Database from './Database';
+import Constants from "expo-constants";
+import * as SQLite from "expo-sqlite";
 
 
 
-
+const db = new Database;
 
 const getItem = (item, index) => ({
   id: Math.random().toString(12).substring(0),
@@ -15,14 +17,16 @@ const getItem = (item, index) => ({
 
 
 
-
-
 const DynamicList = ({showAddWindow, closeAddWindow}) => {
   //items gets intialized as empty array, and setItems is a setter for it
 
+  
  const getItem = (index) => ({
   text: items.map.getItem(index)
  });
+
+
+ /*
 
  useEffect(() => {
   const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
@@ -38,6 +42,12 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
     keyboardDidHideListener.remove();
   };
 }, []);
+*/
+useEffect(() => {
+  db.getAllNotes((notesArray) => {
+    setItems(notesArray);
+  });
+}, []);
 
 
 
@@ -49,6 +59,12 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
       if (newItem) {
         setItems([...items, newItem]);
         setNewItem('');
+        db.insertNote(newItem);
+
+        
+        db.getAllNotes((notesArray) => {
+          setItems(notesArray);
+        });
       }
     };
     const resetInput= () => {
@@ -58,8 +74,11 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
     const removeItem = (index) => {
       const updatedItems = items.filter((_, i) => i !== index);
       setItems(updatedItems);
+      
     };
+
   
+
     return (
       <View>
         <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow} addItem={addItem} newItem={newItem} setNewItem={setNewItem} resetInput={resetInput}/>
