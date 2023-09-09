@@ -41,12 +41,9 @@ export default function App() {
       <TextTitle />
 
       
-
-
-       
        <StatusBar style="auto" />
        <View style = {styles.listContainer}>
-       <DynamicList showAddWindow={showAddWindow} closeAddWindow={closeAddWindow}></DynamicList>
+       <DynamicList showAddWindow={showAddWindow} closeAddWindow={closeAddWindow} ></DynamicList>
        </View>
 
        
@@ -79,21 +76,24 @@ const TextTitle = () => {
 };
 
 const styles = StyleSheet.create({
+  
   container: {
     flex:1,
     flexDirection: 'column',
     alignContent: 'center',
+    //paddingBottom:10,
+    
     //justifyContent: 'center',
     alignItems: 'center',
     top:0,
-    height:'100%'
+    height:'90%'
     
   },
   listContainer: {
-    flex:2,
+    flex:1,
     //flexDirection: 'row',
     width: '100%',
-    padding: 1,
+    padding: 8,
     //height: '80%'
 
   },

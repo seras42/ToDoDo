@@ -1,5 +1,5 @@
 import React, {useState,useRef, useEffect,useCallback} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView, Pressable } from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView, Pressable, Keyboard,TouchableWithoutFeedback } from 'react-native';
 //import ListItem from './ListItem';
 
 import TextNoteButton from './TextNoteButton';
@@ -23,6 +23,21 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
  const getItem = (index) => ({
   text: items.map.getItem(index)
  });
+
+ useEffect(() => {
+  const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    console.log('Keyboard showed');
+  });
+
+  const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+    console.log('Keyboard hidden');
+  });
+
+  return () => {
+    keyboardDidShowListener.remove();
+    keyboardDidHideListener.remove();
+  };
+}, []);
 
 
 
@@ -50,38 +65,18 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
         <AddItemWindow showAddWindow={showAddWindow} closeAddWindow={closeAddWindow} addItem={addItem} newItem={newItem} setNewItem={setNewItem} resetInput={resetInput}/>
 
 
-        <View style={{padding: 10}}>
+        <View >
         {items.map((item, index) => (
           <ListItem
             key={index}
             item={item}
             onDelete={() => removeItem(index)}
+            
            
           />
         ))}
         </View>
-        
-
-
-
-{/*
-        <VirtualizedList
-        data={items}
-        keyExtractor={(item, index) => index.toString()}
-        getItemCount={() => items.length}
-        getItem={getItem}
-        renderItem={({ item, index }) => (
-          <ListItem
-            key={index}
-            item={item}
-            onDelete={() => removeItem(index)}
-          />
-        )}
-      />
-
-        */}
-
-
+      
 
       </View>
     );
@@ -94,26 +89,20 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
 
     const itemStyles = StyleSheet.create({
       itemStyle: {
-        backgroundColor: isLongPressing ? 'green' : '#ffffe6',
-        padding: 12,
+        backgroundColor:'#ffffe6',
+        padding: 5,
         borderWidth: 2,
         borderRadius: 20,
-        width: '100%'
+        width: '100%',
+        marginVertical: 2,
       },
     });
 
     return (
       <View style={itemStyles.itemStyle}>
 
-       
-
-
-    
-
-        <TextNoteButton onDelete={onDelete} item={item}>
-       
-
-        </TextNoteButton>
+  
+        <TextNoteButton onDelete={onDelete} item={item}></TextNoteButton>
     
       </View>
     );
@@ -121,11 +110,19 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
   
   const AddItemWindow = ({showAddWindow, closeAddWindow, setNewItem,addItem,newItem, resetInput}) => {
     const addNoteInput = useRef(null);
+
+    const handleButtonClick = () => {
+
+      addNoteInput.current.focus();
+      
+    };
   
     return(
       
-        <Modal animationType="slide" transparent={true} visible={showAddWindow} onShow={() => {addNoteInput.current.focus();}}>
+      
+        <Modal animationType="slide" transparent={true} visible={showAddWindow} onShow={handleButtonClick}>
           <KeyboardAvoidingView behavior='padding'>
+            
           
         
           <View style={styles.addItemContainer}>
@@ -141,6 +138,7 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
             </View>
             
           </View>
+
           </KeyboardAvoidingView>
         
           
@@ -169,7 +167,8 @@ const DynamicList = ({showAddWindow, closeAddWindow}) => {
       height:'75%',
       fontSize: 16,
       borderWidth: 3,
-      padding: 18,
+      margin:2,
+      padding: 3,
       borderRadius: 20,
       borderColor: '#bfbfbf',
       backgroundColor:'#f2f2f2'
