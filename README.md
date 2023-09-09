@@ -1,2 +1,2 @@
 # ToDoDo
-A very basic simpleto do app
+A very basic Note-ToDo app written using react-native and javscript
