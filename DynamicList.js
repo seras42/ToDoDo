@@ -1,5 +1,5 @@
-import React, {useState,useRef, useEffect,useCallback} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, VirtualizedList, Modal, TextInput,KeyboardAvoidingView, Pressable, Keyboard,TouchableWithoutFeedback } from 'react-native';
+import React, {useState,useRef, useEffect} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity, Modal, TextInput,KeyboardAvoidingView, ScrollView } from 'react-native';
 
 import TextNoteButton from './TextNoteButton';
 import Database from './Database';
@@ -57,14 +57,15 @@ useEffect(() => {
   
     const addItem = () => {
       if (newItem) {
-        setItems([...items, newItem]);
-        setNewItem('');
+        //setItems([...items, newItem]);
+        //setNewItem('');
         db.insertNote(newItem);
 
         
         db.getAllNotes((notesArray) => {
           setItems(notesArray);
         });
+        setNewItem('');
       }
     };
     const resetInput= () => {
@@ -72,8 +73,15 @@ useEffect(() => {
     };
   
     const removeItem = (index) => {
-      const updatedItems = items.filter((_, i) => i !== index);
-      setItems(updatedItems);
+      //const updatedItems = items.filter((_, i) => i !== index);
+      //setItems(updatedItems);
+
+
+
+      db.deleteNote(index);
+      db.getAllNotes((notesArray) => {
+        setItems(notesArray);
+      });
       
     };
 
@@ -85,15 +93,17 @@ useEffect(() => {
 
 
         <View >
+          <ScrollView>
         {items.map((item, index) => (
           <ListItem
             key={index}
             item={item}
-            onDelete={() => removeItem(index)}
+            onDelete={() => removeItem(item.id)}
             
            
           />
         ))}
+        </ScrollView>
         </View>
       
 

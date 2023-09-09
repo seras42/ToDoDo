@@ -21,22 +21,35 @@ class Database {
     });
   }
 
+  deleteAllRecords = () => {
+    this.db.transaction((tx) => {
+      tx.executeSql('DELETE FROM items;', [], (_, result) => {
+        console.log('All records deleted successfully.');
+      });
+    });
+  };
+
   insertNote(content) {
     const currentDate = new Date().toISOString().split('T')[0];
 
+    let nuke = "nuke everything";
+
+    if(nuke.toLowerCase() === content.toLowerCase()) {
+      console.log('Nuking');
+      this.deleteAllRecords();
+    } else {
     this.db.transaction((tx) => {
       tx.executeSql(
         'INSERT INTO items (date, value) VALUES (?, ?);',
         [currentDate, content],
         (txObj, resultSet) => {
-          console.log('Note inserted successfully');
-          console.log(content);
+          //console.log('Note inserted successfully: ' + content);
         },
         (txObj, error) => {
           console.log('Error in inserting note:', error);
         }
       );
-    });
+    });}
   }
 
   getAllNotes(callback) {
@@ -73,9 +86,10 @@ class Database {
         [id],
         (txObj, resultSet) => {
           if (resultSet.rowsAffected > 0) {
-            console.log('Note deleted successfully');
+            //console.log('Note deleted successfully: ' + id);
+            
           } else {
-            console.log('Note not found');
+            console.log('Note not found: ' + id);
           }
         },
         (txObj, error) => {
